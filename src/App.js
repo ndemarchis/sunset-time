@@ -1,26 +1,74 @@
 import React from "react";
-import OpenWeatherKey from "./comps/api"
+
+import * as keys from "./comps/api"
 import * as utils from "./comps/utils"
 import './App.css';
+
+import LocInput from "./comps/LocInput"
 
 class App extends React.Component {
 
   constructor(props) {
-    super()
+    super(props)
     this.state = {
       weatherIsLoaded: false,
-      lat: 40,
-      lon: -77,
+      coordsIsLoaded: false,
+
+      locText: "",
+      lat: 90,
+      lon: 90,
       exclude: "alerts",
     }
+
+    this.handler = this.handler.bind(this)
   }
 
   componentDidMount() {
-    this.fetchWeather();
+    // this.fetchCoords("Enola, PA");
+    // this.fetchWeather();
+  }
+
+  handler(data) {
+    let loc = data;
+    this.setState({
+      locText: data
+    })
+    this.fetchCoords(loc)
+
+  }
+
+  fetchCoords(loc) {
+    let temp = loc
+    temp = encodeURIComponent(temp)
+    fetch(`https://api.radar.io/v1/geocode/forward?query=${temp}`, {
+      headers: {
+        'Authorization': keys.RadarKey
+      }
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        this.setState({
+          // locationData: result,
+          lat: result.addresses[0].latitude,
+          lon: result.addresses[0].longitude,
+          coordsIsLoaded: true,
+        });
+        this.fetchWeather();
+      },
+
+      (error) => {
+        this.setState({
+          coordsIsLoaded: true,
+          error
+        });
+      }
+    )
   }
 
   fetchWeather() {
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.lat}&lon=${this.state.lon}&exclude=${this.state.exclude}&appid=${OpenWeatherKey}`)
+    if (this.state.coordsIsLoaded) {
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.lat}&lon=${this.state.lon}&exclude=${this.state.exclude}&appid=${keys.OpenWeatherKey}`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -28,27 +76,31 @@ class App extends React.Component {
           weatherData: result,
           weatherIsLoaded: true,
         });
+        console.log(`fetched weather: ${this.state.weatherData}`)
       },
 
       (error) => {
         this.setState({
-          isLoaded: true,
+          weatherIsLoaded: true,
           error
         });
       }
     )
-  }
+  }}
 
   render() {
     if (!this.state.weatherIsLoaded) {
-      return <div />
+      this.sunsetTime = ""
     } else {
+      this.sunsetTime = utils.timeConverter(this.state.weatherData.current.sunset)
+    }
     return (
       <div className="App">
         <h1>hey</h1>
-        <p>{utils.timeConverter(this.state.weatherData.current.sunset)}</p>
+        <LocInput handler = {this.handler} />
+        {this.sunsetTime}
       </div>
-    )}}
+    )}
 }
 
 export default App;
