@@ -1,10 +1,13 @@
 import React from "react";
+import { gsap } from "gsap";
+import { CSSRulePlugin } from "gsap/CSSRulePlugin";
 
 import * as keys from "./comps/api"
 import * as utils from "./comps/utils"
 import './App.css';
 
 import LocInput from "./comps/LocInput"
+import WeatherDisp from "./comps/WeatherDisp"
 
 class App extends React.Component {
 
@@ -20,20 +23,25 @@ class App extends React.Component {
       exclude: "alerts",
     }
 
-    this.handler = this.handler.bind(this)
+    this.inputHandler = this.inputHandler.bind(this)
   }
 
   componentDidMount() {
+    // document.body.style.background = "linear-gradient(204deg, #ff0000 0%, #00ff00 62%, #0000ff 100%)";
+    gsap.to(document.getElementById("root"), {background: "linear-gradient(56deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)"})
     // this.fetchCoords("Enola, PA");
     // this.fetchWeather();
   }
 
-  handler(data) {
+  inputHandler(data) {
     let loc = data;
     this.setState({
-      locText: data
+      locText: data,
     })
     this.fetchCoords(loc)
+  }
+
+  displayHandler(data) {
 
   }
 
@@ -48,13 +56,15 @@ class App extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        this.setState({
-          // locationData: result,
-          lat: result.addresses[0].latitude,
-          lon: result.addresses[0].longitude,
-          coordsIsLoaded: true,
-        });
-        this.fetchWeather();
+        if (result.addresses.length > 0) {
+          this.setState({
+            // locationData: result,
+            lat: result.addresses[0].latitude,
+            lon: result.addresses[0].longitude,
+            coordsIsLoaded: true,
+          });
+          this.fetchWeather();
+        }
       },
 
       (error) => {
@@ -89,15 +99,14 @@ class App extends React.Component {
   }}
 
   render() {
-    if (!this.state.weatherIsLoaded) {
-      this.sunsetTime = ""
-    } else {
-      this.sunsetTime = utils.timeConverter(this.state.weatherData.current.sunset)
+    if (!this.state.weatherIsLoaded) { this.sunsetTime = "" } else {
+      this.sunsetTime = utils.timeConverter(this.state.weatherData.current.sunset, "time")
     }
     return (
       <div className="App">
-        <h1>hey</h1>
-        <LocInput handler = {this.handler} />
+        <h1>what sunset?</h1>
+        <LocInput inputHandler = {this.inputHandler} />
+        <WeatherDisp data = {this.state.weatherData} />
         {this.sunsetTime}
       </div>
     )}

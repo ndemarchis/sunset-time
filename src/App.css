@@ -1,31 +1,44 @@
-.App {
-  text-align: center;
+body {
+  font-family: sofia-pro, sans-serif;
+  /* background-color: black; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App {
+  position: absolute;
+  width: 80vw;
+  height: 100vh;
+  transform: translate(10vw, 0vw);
+}
+
+.LocInput {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+input {
+  font-size: 20px;
+  font-family: sofia-pro, sans-serif;
+}
+
+input[type=button],
+input[type=submit] {
+  background-color: #ffffffff;
+  border-radius: 8px;
+  color: black;
+  border: 2px solid #4CAF50; /* Green */
+  padding: 16px;
+}
+
+input[type=input] {
+  padding: 10px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +48,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media 
+only screen and (min-width: 501px) {
+
+}
+
+@media 
+only screen and (max-width: 500px) {
+
 }

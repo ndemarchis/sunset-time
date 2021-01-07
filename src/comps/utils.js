@@ -7,7 +7,9 @@ export function timeConverter(UNIX_timestamp){
     var hour = a.getHours();
     var min = a.getMinutes();
     var sec = a.getSeconds();
+    var suffix = hour >= 12 ? "p.m." : "a.m."
+    min = ("0" + min).slice(-2)
     // var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-    var time = hour + ':' + min + ':' + sec ;
+    var time = `${hour >= 12 ? hour - 12 : hour}:${min} ${suffix}`;
     return time;
 }
