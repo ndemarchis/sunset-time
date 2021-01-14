@@ -1,6 +1,7 @@
 import React from "react";
 import { gsap } from "gsap";
 import { CSSRulePlugin } from "gsap/CSSRulePlugin";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import * as keys from "./comps/api"
 import * as utils from "./comps/utils"
@@ -20,6 +21,8 @@ class App extends React.Component {
 
       locText: "",
       weatherData: null,
+      date: "",
+      format: "",
       lat: 90,
       lon: 90,
       exclude: "alerts",
@@ -33,14 +36,19 @@ class App extends React.Component {
     // this.fetchCoords("Enola, PA");
     // this.fetchWeather();
     gsap.registerPlugin(CSSRulePlugin);
+
+    disableBodyScroll(document);
+
     this.changeBgColor("white", 0.0001)
     this.changeBgColor("orange", 2)
   }
 
-  inputHandler(data) {
-    let loc = data;
+  inputHandler(locData, selectedDate, selectedFormat) {
+    let loc = locData;
     this.setState({
-      locText: data,
+      locText: locData,
+      date: selectedDate,
+      format: selectedFormat,
     })
     this.fetchCoords(loc)
   }
@@ -70,6 +78,7 @@ class App extends React.Component {
             // locationData: result,
             lat: result.addresses[0].latitude,
             lon: result.addresses[0].longitude,
+            city: result.addresses[0].city,
             coordsIsLoaded: true,
           });
           this.fetchWeather();
@@ -96,7 +105,7 @@ class App extends React.Component {
           weatherIsLoaded: true,
         });
 
-        this.changeBgColor("#80b7ff");
+        this.changeBgColor("#80b7ff", 2);
         // console.log(`fetched weather: ${this.state.weatherData}`)
       },
 
@@ -115,14 +124,21 @@ class App extends React.Component {
       weatherDisp = "" 
       locInput = <LocInput inputHandler = {this.inputHandler} />
     } else {
-      weatherDisp = <WeatherDisp data = {this.state.weatherData} />
+      weatherDisp = <WeatherDisp 
+        data = {this.state.weatherData} 
+        loaded = {this.state.weatherIsLoaded} 
+        city = {this.state.city}
+        date = {this.state.date}
+        format = {this.state.format}
+      />
       // this.sunsetTime = utils.timeConverter(this.state.weatherData.current.sunset, "time").toString()
     }
 
     return (
       <div className={`Parent`}>
         <div className={`App`}>
-          <h1>what sunset?</h1>
+          <h1 className = "siteTitle">what sunset?</h1>
+          <h2 className = "shamelessPlug">☕ buy me a coffee!</h2>
           {locInput}
           {weatherDisp}
         </div>
