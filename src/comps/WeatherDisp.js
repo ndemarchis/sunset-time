@@ -44,14 +44,25 @@ class WeatherDisp extends React.Component {
             return "" 
         } else { 
 
-            let temp = this.state.data;
-            if (this.state.format === "imperial") {
-                // add robustness for arbitrary time
-            } else {
+            let formattedData = {};
+            let hour = 0; // fix later
 
+            let temp = this.state.data.hourly[hour];
+            formattedData.clouds = `${temp.weather[0].description} (${temp.clouds}% cover)`;
+            formattedData.humidity = `${temp.humidity}%`
+            console.log(formattedData.clouds)
+
+            if (this.state.format === "imperial") {
+                formattedData.visibility = `${(temp.visibility/1609.34).toFixed(2)} miles`;
+                formattedData.dew_point = `${((temp.dew_point - 273.15) * 9/5 + 32).toFixed(1)}°F`;
+                formattedData.pressure = `${(temp.pressure/33.86389).toFixed(2)} in Hg`
+            } else {
+                formattedData.visibility = `${(temp.visibility / 1000).toFixed(2)} km`;
+                formattedData.dew_point = `${(temp.dew_point - 273.15).toFixed(1)}°C`;
+                formattedData.pressure = `${(temp.pressure)} hPa`
             }
 
-            return
+            return formattedData;
             // return this.state.data 
         }
     }
@@ -62,32 +73,37 @@ class WeatherDisp extends React.Component {
         let dataTypes = [
             {
                 id: 0, 
-                title: "Cloud Cover", 
-                path: data.current.clouds, 
+                title: "cloud cover", 
+                // path: data.current.clouds, 
+                path: data.clouds,
                 avatar: <Cloud />,
                 color: "blue",
             },{
                 id: 1,
-                title: "Visibility",
-                path: data.current.visibility,
+                title: "visibility",
+                // path: data.current.visibility,
+                path: data.visibility,
                 avatar: <Visibility />,
                 color: "green",
             },{
                 id: 2,
-                title: "Dewpoint",
-                path: data.current.dew_point,
+                title: "dewpoint",
+                // path: data.current.dew_point,
+                path: data.dew_point,
                 avatar: <Opacity />,
                 color: "yellow",
             },{
                 id: 3,
-                title: "Relative Humidity",
-                path: data.current.humidity,
+                title: "relative Humidity",
+                // path: data.current.humidity,
+                path: data.humidity,
                 avatar: <Waves />,
                 color: "orange",
             },{
                 id: 4,
-                title: "Pressure",
-                path: data.current.pressure,
+                title: "pressure",
+                // path: data.current.pressure,
+                path: data.pressure,
                 avatar: <FilterHdr />,
                 color: "red",
             }
@@ -103,7 +119,7 @@ class WeatherDisp extends React.Component {
                             {TagName}
                         </Avatar>
                     </ListItemAvatar>
-                    <b>{item.title}</b>: {path}
+                    {item.title}:<b>&nbsp;{path}</b>
                 </ListItem>
             )
         });
@@ -115,7 +131,7 @@ class WeatherDisp extends React.Component {
                 </div>
                 <View style={{flex: 1, flexDirection: 'column'}}>
                     <h1 className = "probNumber">79%</h1>
-                    <h2 className = "numberSub">sunset at <b>{utils.timeConverter(data.current.sunset)}</b> in <b>{this.state.city}</b></h2>
+                    <h2 className = "numberSub">sunset at <b>{utils.timeConverter(this.state.data.current.sunset)}</b> in <b>{this.state.city}</b></h2>
                     <List dense="true">
                         {values}
                     </List>
