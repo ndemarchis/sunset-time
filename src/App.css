@@ -28,6 +28,12 @@ body {
   font-size: 70%;
 }
 
+.utilsAndCredits {
+  position: absolute;
+  right: 0vw;
+  bottom: 10vh;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

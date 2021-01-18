@@ -1,4 +1,4 @@
-export function timeConverter(UNIX_timestamp, format = "time"){
+export function timeConverter(UNIX_timestamp, outFormat = "time"){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
@@ -11,10 +11,15 @@ export function timeConverter(UNIX_timestamp, format = "time"){
     min = ("0" + min).slice(-2)
     // var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     let out = "";
-    if (format.includes("time")) {
+    if (outFormat.includes("time")) {
         out += `${hour >= 12 ? hour - 12 : hour}:${min} ${suffix}`;
-    } if (format.includes("day")) {
-        out += ""
+    } if (outFormat.includes("date")) {
+        out += `${month}. ${date}`
     }
     return out
 };
+
+export function dateConverter(date, outFormat = "date") {
+    var a = new Date(date).getTime() / 1000;
+    return(timeConverter(a, outFormat));
+}

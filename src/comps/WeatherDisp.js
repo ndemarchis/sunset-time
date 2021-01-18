@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import { gsap } from "gsap"
-import { List, ListItem, ListItemAvatar, Avatar, ListItemText, SvgIcon, Box} from '@material-ui/core'
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText, SvgIcon, Box, Button} from '@material-ui/core'
 import { AcUnit, Cloud, Visibility, Opacity, Waves, FilterHdr } from '@material-ui/icons'
 import { rotate } from "ol/transform"
 
@@ -73,39 +73,34 @@ class WeatherDisp extends React.Component {
         let dataTypes = [
             {
                 id: 0, 
-                title: "cloud cover", 
+                title: "clouds", 
                 // path: data.current.clouds, 
                 path: data.clouds,
                 avatar: <Cloud />,
-                color: "blue",
             },{
                 id: 1,
                 title: "visibility",
                 // path: data.current.visibility,
                 path: data.visibility,
                 avatar: <Visibility />,
-                color: "green",
             },{
                 id: 2,
                 title: "dewpoint",
                 // path: data.current.dew_point,
                 path: data.dew_point,
                 avatar: <Opacity />,
-                color: "yellow",
             },{
                 id: 3,
                 title: "relative Humidity",
                 // path: data.current.humidity,
                 path: data.humidity,
                 avatar: <Waves />,
-                color: "orange",
             },{
                 id: 4,
                 title: "pressure",
                 // path: data.current.pressure,
                 path: data.pressure,
                 avatar: <FilterHdr />,
-                color: "red",
             }
         ];
         
@@ -130,11 +125,21 @@ class WeatherDisp extends React.Component {
                     <img src={sun} className="sun" alt="revolving sun" style={{zIndex: 0,}}/>
                 </div>
                 <View style={{flex: 1, flexDirection: 'column'}}>
+                    {/* <Button type="back" width="100%" onClick={(event) => {
+                        this.props.clearWeather();
+                    }}>
+                        <ArrowBack />
+                    </Button> */}
                     <h1 className = "probNumber">79%</h1>
-                    <h2 className = "numberSub">sunset at <b>{utils.timeConverter(this.state.data.current.sunset)}</b> in <b>{this.state.city}</b></h2>
+                    <h2 className = "numberSub">
+                        sunset at&nbsp;
+                        <b>{utils.timeConverter(this.state.data.current.sunset, "time")}</b>
+                        &nbsp;in <b>{this.state.city}</b>
+                        &nbsp;on <b>{utils.dateConverter(this.state.date, "date")}</b></h2>
                     <List dense="true">
                         {values}
                     </List>
+                    {/* {this.state.format} */}
                 </View>
             </div>
         )

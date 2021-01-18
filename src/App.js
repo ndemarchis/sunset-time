@@ -2,6 +2,9 @@ import React from "react";
 import { gsap } from "gsap";
 import { CSSRulePlugin } from "gsap/CSSRulePlugin";
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { Dialog } from '@material-ui/core';
+import { ArrowBack, Info, LocalCafe } from '@material-ui/icons'
+import { View } from "react-native"
 
 import * as keys from "./comps/api"
 import * as utils from "./comps/utils"
@@ -21,13 +24,14 @@ class App extends React.Component {
 
       locText: "",
       weatherData: null,
-      date: "",
+      date: Date(),
       format: "",
       lat: 90,
       lon: 90,
       exclude: "alerts",
     }
     this.inputHandler = this.inputHandler.bind(this)
+    this.clearWeather = this.clearWeather.bind(this)
   }
 
   componentDidMount() {
@@ -41,6 +45,14 @@ class App extends React.Component {
 
     this.changeBgColor("white", 0.0001)
     this.changeBgColor("orange", 2)
+  }
+
+  infoDialog() {
+    return(
+      <Dialog>
+        hey
+      </Dialog>
+    )
   }
 
   inputHandler(locData, selectedDate, selectedFormat) {
@@ -118,6 +130,14 @@ class App extends React.Component {
     )
   }}
 
+  clearWeather() {
+    // window.location.href="javascript:;"
+    this.setState({
+      weatherData: null,
+      weatherIsLoaded: false,
+    })
+  }
+
   render() {
     let locInput, weatherDisp;
     if (!this.state.weatherIsLoaded) { 
@@ -130,6 +150,7 @@ class App extends React.Component {
         city = {this.state.city}
         date = {this.state.date}
         format = {this.state.format}
+        clearWeather = {this.clearWeather}
       />
       // this.sunsetTime = utils.timeConverter(this.state.weatherData.current.sunset, "time").toString()
     }
@@ -137,10 +158,24 @@ class App extends React.Component {
     return (
       <div className={`Parent`}>
         <div className={`App`}>
-          <h1 className = "siteTitle">what sunset?</h1>
-          <h2 className = "shamelessPlug">☕ buy me a coffee!</h2>
+          <div className = "siteIdentity">
+            <h1 className = "siteTitle">what sunset?</h1>
+          </div>
           {locInput}
           {weatherDisp}
+          <div className = "utilsAndCredits">
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <a href="javascript:;">
+                <ArrowBack onClick = {this.clearWeather} />
+              </a>&nbsp;
+              <a href="https://www.buymeacoffee.com/ndemarchis" target="_blank" rel="noreferrer">
+                <LocalCafe />
+              </a>&nbsp;
+              <a href="javascript:;">
+                <Info onClick = {console.log(this.infoDialog)} />
+              </a>
+            </View>
+          </div>
         </div>
       </div>
     )}

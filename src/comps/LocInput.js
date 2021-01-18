@@ -4,18 +4,20 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { View } from "react-native"
 
+import * as utils from "./utils"
+
 import "./LocInput.css";
 
 class LocInput extends React.Component {
     constructor() {
         super();
+        this.today = new Date();
+        this.fortyEightHours = new Date(new Date().getTime() + 2 * (24 * 60 * 60 * 1000));
         this.state = { 
             locText: '',
-            selectedDate: new Date(),
-            selectedFormat: '',
+            selectedDate: this.today,
+            selectedFormat: 'imperial',
         };
-        this.today = new Date();
-        this.tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
         // this.setState({today: this.tomorrowGen()})
     }
 
@@ -41,11 +43,7 @@ class LocInput extends React.Component {
         this.mySubmitHandler();
       }
     };
-
-    myChangeHandler = (event) => {
-      this.setState({locText: event.target.value});
-    }
-
+    
     render() {
       return (
         <div className="LocInput">
@@ -57,7 +55,7 @@ class LocInput extends React.Component {
                 id="outlined-basic" 
                 label="Location" 
                 variant="outlined" 
-                onChange={this.myChangeHandler} 
+                onChange={(event) => {this.setState({locText: event.target.value});}} 
                 onKeyPress={this.myKeypressHandler}
               />
               <KeyboardDatePicker
@@ -68,7 +66,12 @@ class LocInput extends React.Component {
                 id="date-picker-inline"
                 // label="Date picker inline"
                 value={this.state.selectedDate}
-                onChange={(date) => this.setState({selectedDate: date})}
+                autoOk={true} 
+                disablePast={true} 
+                maxDate={this.fortyEightHours} 
+                maxDateMessage={"dates are only allowed 48 hours in the future"}
+                onChange={(date, value) => {
+                  this.setState({selectedDate: date});}}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -81,7 +84,7 @@ class LocInput extends React.Component {
                   id="demo-simple-select-outlined"
                   label="Data format"
                   value={this.state.selectedFormat}
-                  onChange={(format) => this.setState({selectedFormat: format})}
+                  onChange={(event) => {this.setState({selectedFormat: event.target.value});}}
                   displayEmpty
                 >
                   <MenuItem value={"metric"} default >Metric</MenuItem>
