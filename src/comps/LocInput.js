@@ -58,7 +58,7 @@ class LocInput extends React.Component {
                 onChange={(event) => {this.setState({locText: event.target.value});}} 
                 onKeyPress={this.myKeypressHandler}
               />
-              <KeyboardDatePicker
+              {/* <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -75,7 +75,7 @@ class LocInput extends React.Component {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-              />
+              /> */}
               <InputLabel shrink id="demo-simple-select-placeholder-label-label">
                 Data format
               </InputLabel>

@@ -2,10 +2,11 @@ import React from "react"
 import { View } from "react-native"
 import { gsap } from "gsap"
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText, SvgIcon, Box, Button} from '@material-ui/core'
-import { AcUnit, Cloud, Visibility, Opacity, Waves, FilterHdr } from '@material-ui/icons'
+import { AcUnit, Cloud, Visibility, Opacity, Waves, FilterHdr, HotTub } from '@material-ui/icons'
 import { rotate } from "ol/transform"
 
 import * as utils from "./utils"
+import * as algo from "./algo"
 
 import sun from "../sun.svg"
 import "./WeatherDisp.css"
@@ -47,17 +48,28 @@ class WeatherDisp extends React.Component {
             let formattedData = {};
             let hour = 0; // fix later
 
-            let temp = this.state.data.hourly[hour];
+            let temp2 = this.state.data.hourly[hour];
+            let temp = algo.algo(this.state.data, this.state.date)
+            console.log(temp2)
+            console.log(temp)
+
             formattedData.clouds = `${temp.weather[0].description} (${temp.clouds}% cover)`;
             formattedData.humidity = `${temp.humidity}%`
-            console.log(formattedData.clouds)
+            formattedData.visibility = "";
+            formattedData.pressure = "";
+            formattedData.dew_point = "";
+            formattedData.temp = "";
+            formattedData.sunset = temp.sunset;
+            // console.log(formattedData.clouds)
 
             if (this.state.format === "imperial") {
                 formattedData.visibility = `${(temp.visibility/1609.34).toFixed(2)} miles`;
                 formattedData.dew_point = `${((temp.dew_point - 273.15) * 9/5 + 32).toFixed(1)}°F`;
+                formattedData.temp = `${((temp.temp - 273.15) * 9/5 + 32).toFixed(1)}°F`;
                 formattedData.pressure = `${(temp.pressure/33.86389).toFixed(2)} in Hg`
             } else {
                 formattedData.visibility = `${(temp.visibility / 1000).toFixed(2)} km`;
+                formattedData.temp = `${(temp.temp - 273.15).toFixed(1)}°C`;
                 formattedData.dew_point = `${(temp.dew_point - 273.15).toFixed(1)}°C`;
                 formattedData.pressure = `${(temp.pressure)} hPa`
             }
@@ -72,6 +84,12 @@ class WeatherDisp extends React.Component {
         
         let dataTypes = [
             {
+                id: 5,
+                title: "temperature",
+                // path: data.current.dew_point,
+                path: data.temp,
+                avatar: <AcUnit />,
+            },{
                 id: 0, 
                 title: "clouds", 
                 // path: data.current.clouds, 
@@ -91,7 +109,7 @@ class WeatherDisp extends React.Component {
                 avatar: <Opacity />,
             },{
                 id: 3,
-                title: "relative Humidity",
+                title: "relative humidity",
                 // path: data.current.humidity,
                 path: data.humidity,
                 avatar: <Waves />,
@@ -125,17 +143,16 @@ class WeatherDisp extends React.Component {
                     <img src={sun} className="sun" alt="revolving sun" style={{zIndex: 0,}}/>
                 </div>
                 <View style={{flex: 1, flexDirection: 'column'}}>
-                    {/* <Button type="back" width="100%" onClick={(event) => {
-                        this.props.clearWeather();
-                    }}>
-                        <ArrowBack />
-                    </Button> */}
-                    <h1 className = "probNumber">79%</h1>
+                    <h1 className = "probNumber">78%</h1>
                     <h2 className = "numberSub">
-                        sunset at&nbsp;
+                        {/* sunset at&nbsp;
                         <b>{utils.timeConverter(this.state.data.current.sunset, "time")}</b>
                         &nbsp;in <b>{this.state.city}</b>
-                        &nbsp;on <b>{utils.dateConverter(this.state.date, "date")}</b></h2>
+                        &nbsp;on <b>{utils.dateConverter(this.state.date, "date")}</b></h2>                         */}
+                        sunset at&nbsp;
+                        <b>{utils.timeConverter(data.sunset, "time")}</b>
+                        &nbsp;in <b>{this.state.city}</b>
+                        &nbsp;on <b>{utils.timeConverter(data.sunset, "date")}</b></h2>
                     <List dense="true">
                         {values}
                     </List>
