@@ -86,37 +86,31 @@ class WeatherDisp extends React.Component {
             {
                 id: 5,
                 title: "temperature",
-                // path: data.current.dew_point,
                 path: data.temp,
                 avatar: <AcUnit />,
             },{
                 id: 0, 
                 title: "clouds", 
-                // path: data.current.clouds, 
                 path: data.clouds,
                 avatar: <Cloud />,
             },{
                 id: 1,
                 title: "visibility",
-                // path: data.current.visibility,
                 path: data.visibility,
                 avatar: <Visibility />,
             },{
                 id: 2,
                 title: "dewpoint",
-                // path: data.current.dew_point,
                 path: data.dew_point,
                 avatar: <Opacity />,
             },{
                 id: 3,
                 title: "relative humidity",
-                // path: data.current.humidity,
                 path: data.humidity,
                 avatar: <Waves />,
             },{
                 id: 4,
                 title: "pressure",
-                // path: data.current.pressure,
                 path: data.pressure,
                 avatar: <FilterHdr />,
             }

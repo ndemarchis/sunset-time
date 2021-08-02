@@ -12,9 +12,9 @@ export function timeConverter(UNIX_timestamp, outFormat = "time"){
     // var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     let out = "";
     if (outFormat.includes("time")) {
-        out += `${hour >= 12 ? hour - 12 : hour}:${min} ${suffix}`;
+        out += `${hour >= 12 ? hour - 12 : hour}:${min}\xa0${suffix}`;
     } if (outFormat.includes("date")) {
-        out += `${month}. ${date}`
+        out += `${month}.\xa0${date}`
     }
     return out
 };
