@@ -9,6 +9,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.8.10",
+    "@tensorflow/tfjs": "^3.8.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",

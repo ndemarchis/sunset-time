@@ -10,6 +10,7 @@
 
 # production
 /build
+/data
 
 # misc
 .DS_Store
@@ -19,8 +20,6 @@
 .env.test.local
 .env.production.local
 .eslintcache
-
-/src/comps/api.js
 
 npm-debug.log*
 yarn-debug.log*

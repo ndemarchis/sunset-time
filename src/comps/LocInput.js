@@ -1,6 +1,7 @@
 import React, {useState} from "react"
-import {Grid, Paper, TextField, Button, MenuItem, Select, InputLabel, FormControl} from "@material-ui/core"
+import {Grid, Paper, TextField, Button, MenuItem, Select, InputLabel, FormControl, InputAdornment, Input} from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import SearchIcon from '@material-ui/icons/Search';
 import DateFnsUtils from '@date-io/date-fns';
 import { View } from "react-native"
 
@@ -24,14 +25,14 @@ const LocInput = (props) => {
     }
 
     const mySubmitHandler = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         if (locText) {
-          props.inputHandler(locText, selectedDate, selectedFormat)
+          props.inputHandler(locText, selectedDate)
         }
     }
 
     const myKeypressHandler = (e) => {
-      //   //it triggers by pressing the enter key
+        //it triggers by pressing the enter key
       // if (e.keyCode === 13) {
       //   mySubmitHandler();
       // }
@@ -43,45 +44,23 @@ const LocInput = (props) => {
         {/* <form onSubmit={props.handler}> */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <View style={{flex: 1, flexDirection: 'column'}}>
-            <TextField 
+            <InputLabel htmlFor="outlined-basic">Location</InputLabel>
+            <Input 
               id="outlined-basic" 
+              type="text"	
               label="Location" 
               variant="outlined" 
               onChange={(event) => setLocText(event.target.value)}
               onKeyPress={myKeypressHandler()}
+              endAdornment={
+                <InputAdornment position="end">
+                  <SearchIcon
+                    aria-label="submit form"
+                    onClick={() => mySubmitHandler()}
+                  />
+                </InputAdornment>
+              }
             />
-            {/* <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="date-picker-inline"
-              // label="Date picker inline"
-              value={selectedDate}
-              autoOk={true} 
-              disablePast={true} 
-              maxDate={fortyEightHours} 
-              maxDateMessage={"dates are only allowed 48 hours in the future"}
-              onChange={(date, value) => {
-                setSelectedDate(date);
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            /> */}
-            <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-              Data format
-            </InputLabel>
-            <Select
-                // labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-outlined"
-                label="Data format"
-                value={selectedFormat}
-                onChange={(event) => setSelectedFormat(event.target.value)}
-                displayEmpty
-              >
-                <MenuItem value={"metric"} default >Metric</MenuItem>
-                <MenuItem value={"imperial"}>Imperial</MenuItem>
-              </Select>
             <br />
             <Button variant="contained" color="primary" type='submit' className="locSubmitButton">
               Submit

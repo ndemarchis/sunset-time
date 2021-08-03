@@ -4,45 +4,42 @@ import React, {useState, useEffect} from "react";
 import { gsap } from "gsap";
 import { CSSRulePlugin } from "gsap/CSSRulePlugin";
 import { disableBodyScroll } from 'body-scroll-lock';
-import { ArrowBack, Info, LocalCafe } from '@material-ui/icons'
+import { ArrowBack, Info, LocalCafe, Settings } from '@material-ui/icons'
 
-import * as keys from "./comps/api"
-import * as utils from "./comps/utils"
 import './App.css';
-
 import LocInput from "./comps/LocInput"
 import WeatherDisp from "./comps/WeatherDisp"
 import InfoModal from "./comps/InfoModal"
+import SettingsModal from "./comps/SettingsModal"
+
+const RADAR_KEY = process.env.REACT_APP_RADARKEY;
+const OPEN_WEATHER_KEY = process.env.REACT_APP_OPENWEATHERKEY;
 
 const App = () => {
 
   const [weatherIsLoaded, setWeatherIsLoaded] = useState(false);
   const [coordsIsLoaded, setCoordsIsLoaded] = useState(false);
 
-  // const [locText, setLocText] = useState("");
   const [geoData, setGeoData] = useState({lat: "", lon: "", city: ""});
   const [weatherData, setWeatherData] = useState(null);
   const [date, setDate] = useState(Date());
   const [format, setFormat] = useState("");
 
-
   const exclude = "alerts";
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [infoModalIsOpen, setInfoModalIsOpen] = useState(false);
+  const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(CSSRulePlugin);
-
     disableBodyScroll(document);
 
     changeBgColor("white", 0.0001)
     changeBgColor("orange", 2)
   }, [])
 
-  const inputHandler = (locData, selectedDate, selectedFormat) => {
-    // setLocText(locData)
+  const inputHandler = (locData, selectedDate) => {
     setDate(selectedDate)
-    setFormat(selectedFormat)
     fetchCoords(locData)
   }
 
@@ -56,7 +53,7 @@ const App = () => {
     temp = encodeURIComponent(temp)
     fetch(`https://api.radar.io/v1/geocode/forward?query=${temp}`, {
       headers: {
-        'Authorization': keys.RadarKey
+        'Authorization': RADAR_KEY
       }
     })
     .then(res => res.json())
@@ -83,7 +80,7 @@ const App = () => {
 
   const fetchWeather = () => {
     if (coordsIsLoaded) {
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${geoData.lat}&lon=${geoData.lon}&exclude=${exclude}&appid=${keys.OpenWeatherKey}`)
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${geoData.lat}&lon=${geoData.lon}&exclude=${exclude}&appid=${OPEN_WEATHER_KEY}`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -104,9 +101,12 @@ const App = () => {
     setWeatherIsLoaded(false)
   }
 
-  const closeModal = () => {
-    setModalIsOpen(false)
+  const closeModals = () => {
+    setInfoModalIsOpen(false)
+    setSettingsModalIsOpen(false)
   }
+
+  const settingsSetFormat = (format) => { setFormat(format); console.log(format)}
 
     return (
       <div className={`Parent`}>
@@ -131,12 +131,12 @@ const App = () => {
               <a href="https://www.buymeacoffee.com/ndemarchis" target="_blank" rel="noreferrer">
                 <LocalCafe />
               </a>&nbsp;
-              <a href="javascript:;">
-                <Info onClick = {() => setModalIsOpen(true)} />
-              </a>
+              <Settings onClick = {() => setSettingsModalIsOpen(true)}/>&nbsp;
+              <Info onClick = {() => setInfoModalIsOpen(true)} />
             </div>
           </div>
-          {(<InfoModal open={modalIsOpen} doCloseModal={closeModal}/>)}
+          <InfoModal open={infoModalIsOpen} doCloseModal={closeModals}/>
+          <SettingsModal open={settingsModalIsOpen} doCloseModal={closeModals} setFormat={settingsSetFormat} />
         </div>
       </div>
     )

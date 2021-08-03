@@ -50,8 +50,6 @@ class WeatherDisp extends React.Component {
 
             let temp2 = this.state.data.hourly[hour];
             let temp = algo.algo(this.state.data, this.state.date)
-            console.log(temp2)
-            console.log(temp)
 
             formattedData.clouds = `${temp.weather[0].description} (${temp.clouds}% cover)`;
             formattedData.humidity = `${temp.humidity}%`
