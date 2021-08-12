@@ -11,7 +11,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import TensorBoard, History
 
-EPOCHS = 500
+EPOCHS = 1000
 BATCH_SIZE = 12
 
 weather_df = pd.read_csv("./data/randomized.csv") 
@@ -68,4 +68,3 @@ plt.legend()
 plt.xlim([0, max(history.epoch)])
 plt.ylim([0, 1])
 plt.show()  
-
